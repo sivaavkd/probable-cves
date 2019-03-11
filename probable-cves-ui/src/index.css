@@ -1,0 +1,179 @@
+td {
+    text-align: center;
+}
+
+#status-msg {
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    text-align: end;
+    color: white;
+    background-color: green;
+    float: right;
+    display: none;
+}
+
+#status-err {
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 3px;
+    text-align: end;
+    color: red;
+    background-color: lightgray;
+    float: right;
+    display: none;
+}
+
+#status-info {
+    padding: 5px;
+    border: 1px solid blue;
+    border-radius: 3px;
+    color: yellowgreen;
+    background-color: gray;
+    text-align: center;
+    float: right;
+}
+
+#page-format{
+    padding-right:40px;
+    padding-left:40px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+#header-div {
+    font: bolder;
+}
+
+#platform-div {
+    float: left;
+    border: 2px solid;
+    border-radius: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#user-div {
+    float: right;
+    border: 2px solid;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#heading-div {
+    float: auto;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bolder;
+    line-height:2em;
+}
+
+#useremail-div{
+    float: right;
+    display: none;
+}
+
+#data-div{
+    padding-right:40px;
+    padding-left:40px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    margin-right:"auto";
+    margin-left:"auto";
+    border: 3px solid lightgray;
+    border-radius: 3px;   
+}
+
+#cvedatafilter{
+    width: 60%;
+}
+
+#dropdownstatus{
+    float: right;
+}
+
+td button.reviewbtn{
+    width: 80px;
+    height: 40px;
+    font-size: 15;
+}
+
+td select.cveoptions{
+    width: 200px;
+    height: 40px;
+    font: bolder;
+    font-size: 15;
+}
+
+table.actionstable{
+    border: "0";
+    border-spacing: "5";
+    padding-left:"50px";
+    float: right;
+}
+
+table.actionstable th, table.actionstable td{
+    padding: "5";    
+}
+
+table.detailstable{
+    border: "0";
+    border-spacing: "5";
+    padding-left:"50px";
+    float: left;
+}
+
+table.detailstable th, table.detailstable td{
+    padding: "5";    
+}
+
+table.filestable{
+    border: "0";
+    border-spacing: "5";
+    padding-left:"50px";
+    margin-left:auto; 
+    margin-right:auto;
+}
+
+table.filestable th, table.filestable td{
+    padding: "5";    
+}
+
+table.cvedata{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.filterbutton{
+    font-weight: bolder;
+    padding-left: 50px;
+}
+
+td.details-control, td.actions-control, td.files-control {
+    cursor: pointer;
+}
+
+/* td.details-control, td.actions-control, td.files-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc_disabled.png') no-repeat center center;
+}
+
+td.actions-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.actions-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc_disabled.png') no-repeat center center;
+}
+
+td.files-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.files-control {
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc_disabled.png') no-repeat center center;
+} */

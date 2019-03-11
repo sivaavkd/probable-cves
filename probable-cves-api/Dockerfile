@@ -1,0 +1,13 @@
+FROM python:3.7.2-slim
+
+WORKDIR /src
+
+COPY ./src /src
+
+# EXPOSE 5000 5443
+
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT [ "python" ]
+
+CMD [ "cve.py" ]

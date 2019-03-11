@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>Go CVEs </title>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="icon" type="image/png" href="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+        <script src="index.js"></script>
+        <script src="utils.js"></script>
+        <script src="tables.js"></script>
+    </head>
+    
+    <body class="page-format" id="page-format">
+        <div class="header-div" id="header-div">
+            <a  target="_blank" href="https://developers.redhat.com">
+                <div class="platform-div" id="platform-div">
+                    <img src="https://developers.redhat.com/themes/custom/rhdp/logo.svg">
+                </div>
+            </a>
+            <a  target="_blank" href="https://www.redhat.com">
+                <div class="user-div" id="user-div">
+                    <i class="fa fa-user-o"></i>
+                    Siva Kumar
+                    <div class="useremail-div" id="useremail-div">sadhikar@redhat.com</div>
+                </div>
+            </a>
+            
+            <div class="heading-div" id="heading-div">Golang - Potential Security Vulnerabilities</div>
+            </br>
+        </div>
+        <div class="data-div" id="data-div">
+            <div class="status-msg" id="status-msg"></div>
+            <div class="status-msg" id="status-err"></div>
+            <div class="status-msg" id="status-info">Please wait...</div>
+            <div class="filter-div" id="filter-div">
+                <table id="cvedatafilter" class="cvedatafilter">
+                    <tbody>
+                        <tr>
+                            <td>From Date:</td>
+                            <td><input type="text" id="from" name="from"></td>
+                            <td>to:</td>
+                            <td><input type="text" id="to" name="to"></td>
+                            <td><button type="button" id="btnShowData" value="btnShowData">Filter</button></td>
+                            <td><button type="button" id="btnClearFilters" value="btnClearFilters">Clear</button></td>
+                            <td><input type="checkbox" name="includeReviewed" value="No" id="showReviewedYesNo"> Include Reviewed Rows</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+
+            <table id="cveData" class="cvedata">
+            </table>
+        </div>
+        
+
+        <script>
+            const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy";
+            const StatusDesc = {0:"Not Reviewed",1:"Reviewed - Probable CVE",2:"Reviewed - Not a CVE",3:"Not Sure"};
+            const StatusCode = {"Hmm, Not sure":0,"Yes, Security issue":1,"Nah, Not a Security issue":2,"Not Reviewed":0};
+            const CauseDesc = {0:"Issue",2:"PR",3:"Commit",4:"Issue Comment",5:"PR Comment",6:"Commit Comment"};
+            const successMsg = "Status updated successfully";
+            const failedMsg = "Error while updating Status";
+            const infoMsg = "Please wait...";
+            const noDataMsg  = "-- No data available --";
+
+            $( function() {
+                $.ajax({
+                    type:"GET",
+                    dataType: "json",
+                    url: "http://localhost:5000/cveapi/pCVE",
+                    success: function(result){
+                        var cveTable = tableData(result);
+                        setTableEvents(cveTable);
+                        setDefaultFilters();
+                    },
+                    complete: function(){
+                        showStatusMsg('info','',false,true,false);
+                    }
+                });
+                
+              } );
+            $(document).ready( function () {
+                $("#from").datepicker("option", "maxDate", new Date());
+                $("#to").datepicker("option", "maxDate", new Date());
+                $('#showReviewedYesNo').prop('checked', false);
+                $('#filter-div').hide();
+                setLoadEvents();
+            } );
+
+        </script>
+    </body>
+    
+</html>
