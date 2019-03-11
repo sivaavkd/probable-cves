@@ -73,7 +73,7 @@ def create():
 app = connexion.App(__name__, specification_dir='.')
 CORS(app.app)
 # Read the swagger.yml file to configure the endpoints
-app.add_api('Files/swagger.yml')
+app.add_api('config-files/swagger.yml')
 app.run()
 
 

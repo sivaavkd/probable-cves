@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 from os import path
 
-def readconfig(filename='Files/db.ini', section='devcluster'):
+def readconfig(filename='config-files/db.ini', section='devcluster'):
     # create a parser
     parser = ConfigParser()
     # read config file
