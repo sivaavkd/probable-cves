@@ -10,6 +10,8 @@ RUN chmod -R 777 /opt/scripts && . /opt/scripts/install.sh
 
 WORKDIR /var/www/html
 
+EXPOSE 80
+
 USER apache
 
 ENTRYPOINT ["/opt/scripts/run.sh"]
