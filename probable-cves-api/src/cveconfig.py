@@ -1,11 +1,14 @@
 from configparser import ConfigParser
-from os import path
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 def readconfig(filename='config-files/db.ini', section='devcluster'):
     # create a parser
     parser = ConfigParser()
     # read config file
-    filename = path.dirname(__file__)+'/'+filename
+    filename = os.path.dirname(__file__)+'/'+filename
     parser.read(filename)
     print(parser)
     
@@ -18,3 +21,24 @@ def readconfig(filename='config-files/db.ini', section='devcluster'):
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
 
     return db
+
+class Postgres:
+    """Postgres connection session handler."""
+
+    def __init__(self):
+        """Initialize the connection to Postgres database."""
+        self.connection = 'postgresql://{user}:{password}@{pgbouncer_host}:{pgbouncer_port}' \
+                          '/{database}?sslmode=disable'. \
+            format(user=os.getenv('POSTGRESQL_USER'),
+                   password=os.getenv('POSTGRESQL_PASSWORD'),
+                   pgbouncer_host=os.getenv('PGBOUNCER_SERVICE_HOST', 'bayesian-pgbouncer'),
+                   pgbouncer_port=os.getenv('PGBOUNCER_SERVICE_PORT', '5432'),
+                   database=os.getenv('POSTGRESQL_DATABASE'))
+        engine = create_engine(self.connection)
+
+        self.Session = sessionmaker(bind=engine)
+        self.session = self.Session()
+
+    def session(self):
+        """Return the established session."""
+        return self.session
