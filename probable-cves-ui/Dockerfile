@@ -10,7 +10,7 @@ RUN chmod -R 777 /opt/scripts && . /opt/scripts/install.sh
 
 WORKDIR /var/www/html
 
-EXPOSE 80
+EXPOSE 8080
 
 USER apache
 

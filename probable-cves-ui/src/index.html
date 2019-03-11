@@ -73,12 +73,12 @@
             const failedMsg = "Error while updating Status";
             const infoMsg = "Please wait...";
             const noDataMsg  = "-- No data available --";
-
+            const apiPrefix = "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
             $( function() {
                 $.ajax({
                     type:"GET",
                     dataType: "json",
-                    url: "http://localhost:5000/cveapi/pCVE",
+                    url: apiPrefix + "cveapi/pCVE",
                     success: function(result){
                         var cveTable = tableData(result);
                         setTableEvents(cveTable);

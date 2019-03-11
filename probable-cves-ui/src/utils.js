@@ -136,7 +136,7 @@ function setTableEvents(cveTable){
              if (updateData == ''){return;}
              var saveData = $.ajax({
                  type: 'PUT',
-                 url: "http://127.0.0.1:5000/cveapi/pCVE/Status",
+                 url: apiPrefix + "cveapi/pCVE/Status",
                  data: updateData,
                  dataType: 'json',
                  headers: { 
