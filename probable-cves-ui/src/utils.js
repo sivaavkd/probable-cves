@@ -64,7 +64,7 @@ function setLoadEvents(){
         var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
         if (! reviewedYesNo) {
             var table = $('#cveData').dataTable();
-            table.fnFilter( 0, statusCol);
+            table.fnFilter("Not Reviewed", statusCol);
         } else {
             var oTable = $('#cveData').DataTable();
             oTable.search('').columns().search('').draw();
@@ -80,7 +80,6 @@ function setDefaultFilters(){
             var toDate = $('#to').val();
             
             var rowDate = data[dateCol] || "1/1/1990";
-            var rowReviewed = data [statusCol] || 0;
             if ( new Date(rowDate) < new Date(fromDate) || new Date(rowDate) > new Date(toDate) )
             {
                 return false;
@@ -89,7 +88,7 @@ function setDefaultFilters(){
         }
     );
     var oTable = $('#cveData').dataTable();
-    oTable.fnFilter( 0, statusCol);
+    oTable.fnFilter( "Not Reviewed", statusCol);
 }
 
 function setTableEvents(cveTable){

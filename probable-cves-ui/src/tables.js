@@ -102,7 +102,8 @@ function tableData(cvedata){
              {
                  extend:    'pdfHtml5',
                  text:      '<i class="fa fa-file-pdf-o"></i>',
-                 titleAttr: 'PDF'
+                 titleAttr: 'PDF',
+                 exportOptions: {columns: [9,1,2,3,5,7]}
              },
              {
                  text: 'Filter options', className: 'filterbutton',
@@ -152,11 +153,7 @@ function tableData(cvedata){
                  }
              },
              {   title: "StatusNumber", data: "review_status", visible: false },
-             {   title: "Status", data: "review_status",
-                 render: function (data, type, full, meta) {
-                     return StatusDesc[data];
-                 }
-             },
+             {   title: "Status", data: "review_status" },
              {   title: "Actions", data: null,
                  render: function (data, type, row, meta) {
                      return '<i class="fa fa-ellipsis-v"></i>';
@@ -164,7 +161,8 @@ function tableData(cvedata){
                  className: 'actions-control',
                  defaultContent: '',
                  sortable: false 
-             }
+             },
+             {   title: "S.No", data: "id", visible: false }
          ],
          data: cvedata, 
          order: [[orderCol, "desc"]]

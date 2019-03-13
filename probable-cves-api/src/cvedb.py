@@ -159,7 +159,3 @@ def getDataFromDB():
             conn.close()
             print('Database connection closed.')
     return json.loads(cvedata)
- 
-# if __name__ == '__main__':
-#     #updateDataToDB('Reviewed','1')
-#     getDataFromDB()

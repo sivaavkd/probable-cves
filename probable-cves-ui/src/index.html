@@ -66,16 +66,14 @@
 
         <script>
             const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy";
-            const StatusDesc = {0:"Not Reviewed",1:"Reviewed - Probable CVE",2:"Reviewed - Not a CVE",3:"Not Sure"};
-            const StatusCode = {"Hmm, Not sure":0,"Yes, Security issue":1,"Nah, Not a Security issue":2,"Not Reviewed":0};
-            const CauseDesc = {0:"Issue",2:"PR",3:"Commit",4:"Issue Comment",5:"PR Comment",6:"Commit Comment"};
+            const StatusCode = {"Hmm, Not sure":"Not Reviewed","Yes, Security issue":"Reviewed - Probable CVE","Nah, Not a Security issue":"Reviewed - Not a CVE","Not Reviewed":"Not Reviewed"};
             const successMsg = "Status updated successfully";
             const failedMsg = "Error while updating Status";
             const infoMsg = "Please wait...";
             const noDataMsg  = "-- No data available --";
             const apiPrefix = "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
             const localPrefix = "http://localhost:5000/";
-            
+
             $( function() {
                 $.ajax({
                     type:"GET",

@@ -165,7 +165,7 @@ definitions:
     type: object
     properties:
       status:
-        type: integer
+        type: string
         description: new status of CVE
       reviewed_by:
         type: string
