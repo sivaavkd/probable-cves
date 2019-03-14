@@ -48,7 +48,7 @@ function getFileHTML(str){
           return '<tr><td><i>File name</i></td><td>' + str + '</td></tr>';
      }
      else {
-          return '<tr><td><b>Patch link</b></td><td>' + getURLHTML(str,7) + '</td></tr>';
+          return '<tr><td><b>Patch link</b></td><td>' + getURLHTML(str,13) + '</td></tr>';
      }
 }
 
