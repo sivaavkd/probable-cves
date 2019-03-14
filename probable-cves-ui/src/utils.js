@@ -56,7 +56,7 @@ function setLoadEvents(){
         $("#from").val(""); $('#to').val(""); 
         $('#showReviewedYesNo').prop('checked', false); 
         var oTable = $('#cveData').dataTable(); 
-        oTable.fnFilter( 0, statusCol);
+        oTable.fnFilter("Not Reviewed", statusCol);
         var table = $('#cveData').DataTable(); 
         table.draw() ;
     });
