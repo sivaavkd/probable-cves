@@ -56,9 +56,7 @@ def updateStatusToDB(status,autoid,reviewed_by,review_comments):
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         sql_update_query = """UPDATE probable_cves set review_status = %s ,reviewed_by = %s,  
-                            review_comments = ( 
-                                CASE WHEN review_comments IS NULL THEN '[]'::jsonb ELSE review_comments END
-                                )|| %s::jsonb ,
+                            review_comments = %s,
                             reviewed_at = now() where id = %s"""
         cur.execute(sql_update_query,[status,reviewed_by, review_comments, autoid])
         conn.commit()

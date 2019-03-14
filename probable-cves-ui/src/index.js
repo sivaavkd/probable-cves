@@ -75,9 +75,8 @@ function getUpdateData(row){
      if (changedVal == undefined) { showStatusMsg('error','Please select an Action !',false); return '';}
      var updatedBy= $('#useremail-div').text();
      var updateComments = $('#reviewcomments'+autocveid).val();
-     if (updateComments != ''){ updateComments = '{"User":"' + updatedBy + '","Comments":"' + updateComments + '"}'; }
-     else { updateComments = '[]';}
-     return JSON.stringify({'status':changedVal,'id':autocveid,'reviewed_by':updatedBy,'review_comments':updateComments});
+     var reviewedAt = new Date($.now());
+     return JSON.stringify({'status':changedVal,'id':autocveid,'reviewed_by':updatedBy,'review_comments':updateComments,'reviewed_at':reviewedAt});
 }
 
 function showStatusMsg(Msgtype = 'success', message = '',isReload = true, autoHide = true, isShow = true){

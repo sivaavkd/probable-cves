@@ -85,7 +85,7 @@ function toggleChildTable (tr,row,childType){
     }
 }
 
-function tableData(cvedata){
+function setTableData(cvedata){
     var cvetable = $('#cveData').DataTable({
          dom: 'Bfrtip',
          buttons: [

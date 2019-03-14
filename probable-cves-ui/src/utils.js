@@ -56,7 +56,7 @@ function setLoadEvents(){
         $("#from").val(""); $('#to').val(""); 
         $('#showReviewedYesNo').prop('checked', false); 
         var oTable = $('#cveData').dataTable(); 
-        oTable.fnFilter("Not Reviewed", statusCol);
+        oTable.fnFilter("Not Reviewed", statusCol,false,false);
         var table = $('#cveData').DataTable(); 
         table.draw() ;
     });
@@ -64,7 +64,7 @@ function setLoadEvents(){
         var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
         if (! reviewedYesNo) {
             var table = $('#cveData').dataTable();
-            table.fnFilter("Not Reviewed", statusCol);
+            table.fnFilter("Not Reviewed", statusCol,false,false);
         } else {
             var oTable = $('#cveData').DataTable();
             oTable.search('').columns().search('').draw();
@@ -72,7 +72,7 @@ function setLoadEvents(){
     });
 }
 
-function setDefaultFilters(){
+function setFilters(){
     /* Custom filtering function which will search data in column four between two values */
     $.fn.dataTable.ext.search.push(
         function( settings, data, dataIndex ) {
@@ -87,8 +87,6 @@ function setDefaultFilters(){
             return true;
         }
     );
-    var oTable = $('#cveData').dataTable();
-    oTable.fnFilter( "Not Reviewed", statusCol);
 }
 
 function setTableEvents(cveTable){

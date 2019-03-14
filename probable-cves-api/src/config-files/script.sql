@@ -43,7 +43,7 @@ create table probable_cves (
     identified_url JSONB,
     files_changed JSONB,
     review_status probable_cves_review_enum NOT NULL DEFAULT 'Not Reviewed',
-    reviewed_at TIMESTAMP DEFAULT NOW(),
+    reviewed_at TIMESTAMP,
     reviewed_by VARCHAR(255),
     cve_id VARCHAR(50),
     cve_date DATE,
@@ -73,11 +73,12 @@ VALUES ('golang', 'kubernetes/dns', 'https://github.com/kubernetes/dns', 'kubern
 create table probable_cves_review_history (
 history_id serial primary key,
 p_id INTEGER NOT NULL REFERENCES probable_cves(id),
-reviewed_at TIMESTAMP NOT NULL,
+reviewed_at TIMESTAMP,
 reviewed_by VARCHAR(255),
-review_status probable_cves_review_enum NOT NULL,
+review_status probable_cves_review_enum,
 review_comments VARCHAR(255),
 last_modified_at TIMESTAMP DEFAULT NOW(),
+row_data JSONB,
 operation VARCHAR(10) NOT NULL
 );
 
@@ -88,16 +89,27 @@ CREATE OR REPLACE FUNCTION proc_pCVE_audit() RETURNS TRIGGER AS $pCVE_audit$
         -- make use of the special variable TG_OP to work out the operation.
         --
         IF (TG_OP = 'UPDATE') THEN
-            INSERT INTO probable_cves_review_history 
-            (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation) 
-            SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Status Update';
-            RETURN OLD;
+            IF (OLD.reviewed_at = NEW.reviewed_at) THEN
+                INSERT INTO probable_cves_review_history 
+                (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
+                SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Update',row_to_json(OLD.*);
+                RETURN OLD;
+            ELSE
+                INSERT INTO probable_cves_review_history 
+                (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
+                SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Status',row_to_json(OLD.*);
+                RETURN OLD;
+            END IF;
         -- ELSIF (TG_OP = 'INSERT') THEN
-        --     INSERT INTO emp_audit SELECT 'U', now(), user, NEW.*;
+        --     INSERT INTO probable_cves_review_history 
+        --     (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
+        --     SELECT NEW.id,NEW.reviewed_at,NEW.reviewed_by,NEW.review_status,NEW.review_comments,'Insert',row_to_json(NEW.*);
         --     RETURN NEW;
         -- ELSIF (TG_OP = 'DELETE') THEN
-        --     INSERT INTO emp_audit SELECT 'I', now(), user, NEW.*;
-        --     RETURN NEW;
+        --     INSERT INTO probable_cves_review_history 
+        --     (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
+        --     SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Delete',row_to_json(OLD.*);
+        --     RETURN OLD;
         END IF;
         RETURN NULL; -- result is ignored since this is an AFTER trigger
     END;

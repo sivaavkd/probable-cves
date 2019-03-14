@@ -80,9 +80,11 @@
                     dataType: "json",
                     url: apiPrefix + "cveapi/pCVE",
                     success: function(result){
-                        var cveTable = tableData(result);
+                        var cveTable = setTableData(result);
                         setTableEvents(cveTable);
-                        setDefaultFilters();
+                        setFilters();
+                        var oTable = $('#cveData').dataTable();
+                        oTable.fnFilter( "Not Reviewed", statusCol,false,false);
                     },
                     complete: function(){
                         showStatusMsg('info','',false,true,false);
