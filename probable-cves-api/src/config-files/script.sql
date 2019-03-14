@@ -1,3 +1,10 @@
+
+DROP TRIGGER IF EXISTS pCVE_audit ON probable_cves;
+DROP TABLE IF EXISTS probable_cves_review_history;
+DROP TABLE IF EXISTS probable_cves;
+DROP TYPE IF EXISTS probable_cves_ecosystem_enum;
+DROP TYPE IF EXISTS probable_cves_cause_enum;
+DROP TYPE IF EXISTS probable_cves_review_enum;
 create type probable_cves_ecosystem_enum as enum(
     'maven', 
     'python', 
