@@ -1,3 +1,7 @@
+function actionAllowed(){
+    return true;  // to do - implement logic to validate if the logged in user is allowed to take action or not.
+}
+
 function getDate( element ) {
     var date;
     try {
@@ -54,7 +58,8 @@ function setLoadEvents(){
     });
     $("#btnClearFilters").on('click', function() { 
         $("#from").val(""); $('#to').val(""); 
-        $('#showReviewedYesNo').prop('checked', false); 
+        $('#showReviewedYesNo').prop('checked', false);
+        $('#showDemoItemsOnly').prop('checked', false);
         var oTable = $('#cveData').dataTable(); 
         oTable.fnFilter("Not Reviewed", statusCol,false,false);
         var table = $('#cveData').DataTable(); 
@@ -68,6 +73,15 @@ function setLoadEvents(){
         } else {
             var oTable = $('#cveData').DataTable();
             oTable.search('').columns().search('').draw();
+        }
+    });
+    $("#showDemoItemsOnly").on('click', function() { 
+        var showDemoItems = $('#showDemoItemsOnly').is(":checked");
+        var table = $('#cveData').dataTable();
+        if (showDemoItems) {
+            showSpecificRows(demoRows,table,idCol,true);
+        } else {
+            table.fnFilter("Not Reviewed", statusCol,false,false);
         }
     });
 }

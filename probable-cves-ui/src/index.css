@@ -87,11 +87,22 @@ td {
 }
 
 #cvedatafilter{
-    width: 60%;
+    width: 80%;
 }
 
 #dropdownstatus{
     float: right;
+}
+
+.cvedatafilter button{
+    width: 80px;
+    height: 30px;
+    font-size: 15;
+}
+
+.cvedatafilter input#from, .cvedatafilter input#to{
+    height: 30px;
+    font-size: 15;
 }
 
 td button.reviewbtn{

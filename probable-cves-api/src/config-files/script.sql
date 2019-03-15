@@ -45,7 +45,7 @@ create table probable_cves (
     review_status probable_cves_review_enum NOT NULL DEFAULT 'Not Reviewed',
     reviewed_at TIMESTAMP,
     reviewed_by VARCHAR(255),
-    cve_id VARCHAR(50),
+    cve_id VARCHAR(255),
     cve_date DATE,
     flagged_score VARCHAR(25) NOT NULL,
     flagged_at TIMESTAMP NOT NULL DEFAULT NOW(), 
@@ -89,7 +89,7 @@ CREATE OR REPLACE FUNCTION proc_pCVE_audit() RETURNS TRIGGER AS $pCVE_audit$
         -- make use of the special variable TG_OP to work out the operation.
         --
         IF (TG_OP = 'UPDATE') THEN
-            IF (OLD.reviewed_at = NEW.reviewed_at) THEN
+            IF (OLD.review_status = NEW.review_status) THEN
                 INSERT INTO probable_cves_review_history 
                 (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
                 SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Update',row_to_json(OLD.*);

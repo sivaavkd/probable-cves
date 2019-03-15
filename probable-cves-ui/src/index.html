@@ -35,7 +35,7 @@
                 </div>
             </a>
             
-            <div class="heading-div" id="heading-div">Golang - Potential Security Vulnerabilities</div>
+            <div class="heading-div" id="heading-div">Golang for OCP - Potential Security Vulnerabilities</div>
             </br>
         </div>
         <div class="data-div" id="data-div">
@@ -51,8 +51,9 @@
                             <td>to:</td>
                             <td><input type="text" id="to" name="to"></td>
                             <td><button type="button" id="btnShowData" value="btnShowData">Filter</button></td>
-                            <td><button type="button" id="btnClearFilters" value="btnClearFilters">Clear</button></td>
                             <td><input type="checkbox" name="includeReviewed" value="No" id="showReviewedYesNo"> Include Reviewed Rows</td>
+                            <td><input type="checkbox" name="showDemoItemsOnly" value="No" id="showDemoItemsOnly"> <span id="showDemoItemsSpan">Show only Demo Rows</span></td>
+                            <td><button type="button" id="btnClearFilters" value="btnClearFilters">Clear</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,7 +66,8 @@
         
 
         <script>
-            const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy";
+            const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy"; const idCol = 10;
+            const demoRows = [12,13]; // '';
             const StatusCode = {"Hmm, Not sure":"Not Reviewed","Yes, Security issue":"Reviewed - Probable CVE","Nah, Not a Security issue":"Reviewed - Not a CVE","Not Reviewed":"Not Reviewed"};
             const successMsg = "Status updated successfully";
             const failedMsg = "Error while updating Status";
@@ -96,6 +98,7 @@
                 $("#from").datepicker("option", "maxDate", new Date());
                 $("#to").datepicker("option", "maxDate", new Date());
                 $('#showReviewedYesNo').prop('checked', false);
+                $('#showDemoItemsOnly').prop('checked', false);
                 $('#filter-div').hide();
                 setLoadEvents();
             } );

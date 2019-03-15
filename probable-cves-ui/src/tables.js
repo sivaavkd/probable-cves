@@ -1,5 +1,6 @@
 function childActionsFormat ( rowData ) {
     var id = rowData.id;
+    if (! actionAllowed()){ return '';}
     return '<table class="actionstable">'+
               '<tr>'+
                    '<td><b>Comments</b></td>'+
@@ -28,8 +29,6 @@ function childDetailsFormat ( rowData ) {
                    '<td>'+getURLHTML(rowData.repo_url,0,0)+'</td>'+
                    '<td><b>Package:</b></td>'+
                    '<td>'+rowData.package+'</td>'+
-                   // '<td><b>Reason:</b></td>'+
-                   // '<td>'+rowData.cause_type+' on '+rowData.flagged_at+'</td>'+
               '</tr>'+
               '<tr>'+
                    '<td><b>Issue:</b></td>'+
@@ -38,17 +37,12 @@ function childDetailsFormat ( rowData ) {
                    '<td>'+parseURLs(rowData.fixed_url)+'</td>'+
                    '<td><b>Commit:</b></td>'+
                    '<td>'+parseURLs(rowData.commit_url,7)+'</td>'+
-                   // '<td><b>Files Changed:</b></td>'+
-                   // //'<td>'+parseURLs(rowData.commit_url,0,0,'link','.patch')+'</td>'+
-                   // '<td class="files-control" id="files-control'+ rowData.id + '"></td>' +
               '</tr>'+  
               '<tr>'+
                    '<td><b>CVE ID:</b></td>'+
-                   '<td>'+maskNull(rowData.cve_id)+'</td>'+
-                   '<td><b>CVE found on:</b></td>'+
+                   '<td>'+getURLHTML(rowData.cve_id)+'</td>'+
+                   '<td><b>CVE Published Date:</b></td>'+
                    '<td>'+maskNull(rowData.cve_date)+'</td>'+
-                   // '<td><b>Review comments:</b></td>'+
-                   // '<td>'+maskNull(rowData.review_comments)+'</td>'+
                    '<td><b>System ID:</b></td>'+
                    '<td>'+rowData.id+'</td>'+
               '</tr>'+
@@ -59,16 +53,16 @@ function childFilesFormat ( rowData ) {
     if (rowData.files_changed == undefined || rowData.files_changed == null || rowData.files_changed == ''){
          return noDataMsg;
     }
-    return '<table class="filestable">'+
+    return  '<table class="filestable">'+
               parseFilesChanged(rowData) +
-         '</table>';
+            '</table>';
 }
 
 function toggleChildTable (tr,row,childType){
-    if ( row.child.isShown() ) {
+    if (row.child.isShown()) {
          // This row is already open - close it
-         row.child.hide();
-         tr.removeClass('shown');
+        row.child.hide();
+        tr.removeClass('shown');
     }
     else {
     // Open this row
@@ -92,12 +86,14 @@ function setTableData(cvedata){
              {
                  extend:    'copyHtml5',
                  text:      '<i class="fa fa-files-o"></i>',
-                 titleAttr: 'Copy'
+                 titleAttr: 'Copy',
+                 exportOptions: {columns: [9,1,2,3,5,7]}
              },
              {
                  extend:    'csvHtml5',
                  text:      '<i class="fa fa-file-text-o"></i>',
-                 titleAttr: 'CSV'
+                 titleAttr: 'CSV',
+                 exportOptions: {columns: [9,1,2,3,5,7]}
              },
              {
                  extend:    'pdfHtml5',
@@ -112,57 +108,68 @@ function setTableData(cvedata){
                  }
              }
          ],
+         language: {
+            searchPlaceholder: "Search",
+            search: "",
+          },
          columns: [
-             {   title: 'Details',
-                 className: 'details-control',
-                 data: null,
-                 sortable: false,
-                 defaultContent: '',
-                 render: function (data, type, row, meta) {
-                     return '<i class="fa fa-list"></i>';
-                 }
-             },
-             {   title: "Repository",
-                 render: function (data, type, full, meta) {
-                     return getURLHTML(data,0,0);
-                 },
-                 data: "repo_url"
-             },
-             {   title: "Caused by", data: "commit_url",
-                 render: function (data, type, row, meta) {
-                     return showCVECause(row);
-                 } 
-             },
-             {   title: "Caused Date", data: "commit_date", type: "date",
-                 render: function (data, type, row, meta) {
-                     return showCVECause(row,true);
-                 }
-             },
-             {   title: "Files changed", data: null,
-                 className: 'files-control',
-                 defaultContent: '',
-                 sortable: false,
-                 render: function (data, type, row, meta) {
-                     return '<i class="fa fa-file-code-o"></i>';
-                 }
-             },
-             
-             {   title: "Confidence", data: "flagged_score",
-                 render: function (data, type, row, meta) {
-                     return showScore(data);
-                 }
-             },
-             {   title: "StatusNumber", data: "review_status", visible: false },
-             {   title: "Status", data: "review_status" },
-             {   title: "Actions", data: null,
-                 render: function (data, type, row, meta) {
-                     return '<i class="fa fa-ellipsis-v"></i>';
-                 },
-                 className: 'actions-control',
-                 defaultContent: '',
-                 sortable: false 
-             },
-             {   title: "S.No", data: "id", visible: false }
+            {   title: 'Details',
+                    className: 'details-control',
+                    data: null,
+                    sortable: false,
+                    defaultContent: '',
+                    render: function (data, type, row, meta) {
+                        return '<i class="fa fa-list"></i>';
+                    }
+                },
+                {   title: "Repository",
+                    render: function (data, type, full, meta) {
+                        return getURLHTML(data,0,0);
+                    },
+                    data: "repo_url"
+                },
+                {   title: "Identified by", data: "commit_url",
+                    render: function (data, type, row, meta) {
+                        return showCVECause(row);
+                    } 
+                },
+                {   title: "Identified date", data: "commit_date", type: "date",
+                    render: function (data, type, row, meta) {
+                        return showCVECause(row,true);
+                    }
+                },
+                {   title: "Files changed", data: null,
+                    className: 'files-control',
+                    defaultContent: '',
+                    sortable: false,
+                    render: function (data, type, row, meta) {
+                        return '<i class="fa fa-file-code-o"></i>';
+                    }
+                },
+                
+                {   title: "Confidence", data: "flagged_score",
+                    render: function (data, type, row, meta) {
+                        return showScore(data);
+                    }
+                },
+                {   title: "StatusNumber", data: "review_status", visible: false },
+                {   title: "Status", data: "review_status" },
+                {   title: "Actions", data: null,
+                    render: function (data, type, row, meta) {
+                        return '<i class="fa fa-ellipsis-v"></i>';
+                    },
+                    className: 'actions-control',
+                    defaultContent: '',
+                    sortable: false 
+                },
+                {   data: null,
+                sortable: false,
+                defaultContent: '',
+                render: function (data, type, row, meta) {
+                    return showInfoIcon(row);
+                }
+                },
+                {   title: "S.No", data: "id", visible: false }
          ],
          data: cvedata, 
          order: [[orderCol, "desc"]]

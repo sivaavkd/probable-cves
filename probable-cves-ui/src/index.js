@@ -66,6 +66,10 @@ function  toggleFilters(){
      }
      else{
           $('#filter-div').show();
+          if (demoRows == '') {
+               $('#showDemoItemsOnly').hide();
+               $('#showDemoItemsSpan').text('');
+           }
      }
 }
 
@@ -124,5 +128,30 @@ function showCVECause(rowData,bDate=false){
 
 function showScore(score){
      //return (parseFloat(score) * 100).toFixed(2);
-     return (Math.round(parseFloat(score) * 100)).toString() + '%';
+     return (Math.floor(parseFloat(score) * 100)).toString() + '%';
+}
+
+function showInfoIcon(rowData){
+     var iconStr = '';
+     if (rowData.cve_id != null && rowData.cve_id != '') 
+     { iconStr = iconStr + '<i title="' + rowData.cve_id + '" class="fa fa-info-circle"></i>';}
+     //iconStr = iconStr + '<i class="fa fa-info-circle"></i>';
+     return iconStr;
+}
+
+function showSpecificRows(values, table, colIndex, match){
+     $.fn.dataTableExt.afnFiltering.push(
+          function(settings, data, dataIndex) {
+               for (i=0;i<values.length;i++) {
+                    if (match) {
+                         if (data[colIndex] == values[i]) return true;
+                    } else {
+                         if (data[colIndex].indexOf(values[i])>=0) return true;
+                    }     
+               }
+               return false;
+          }     
+     );
+     table.fnDraw();
+     $.fn.dataTableExt.afnFiltering.pop();
 }
