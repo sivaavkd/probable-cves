@@ -29,19 +29,18 @@
             </a>
             <a  target="_blank" href="https://www.redhat.com">
                 <div class="user-div" id="user-div">
-                    <i class="fa fa-user-o"></i>
-                    Siva Kumar
-                    <div class="useremail-div" id="useremail-div">sadhikar@redhat.com</div>
+                    <div class="useremail-div" id="useremail-div"></div>
                 </div>
             </a>
             
-            <div class="heading-div" id="heading-div">Golang for OCP - Potential Security Vulnerabilities</div>
+            <div class="heading-div" id="heading-div"></div>
+            <div class="aboutpage-div" id="aboutpage-div"></div>
             </br>
         </div>
         <div class="data-div" id="data-div">
             <div class="status-msg" id="status-msg"></div>
             <div class="status-msg" id="status-err"></div>
-            <div class="status-msg" id="status-info">Please wait...</div>
+            <div class="status-msg" id="status-info"></div>
             <div class="filter-div" id="filter-div">
                 <table id="cvedatafilter" class="cvedatafilter">
                     <tbody>
@@ -64,42 +63,19 @@
             </table>
         </div>
         
-
         <script>
             const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy"; const idCol = 10;
-            const demoRows = [12,13]; // '';
+            const demoRows = ''; // [12,13];
             const StatusCode = {"Hmm, Not sure":"Not Reviewed","Yes, Security issue":"Reviewed - Probable CVE","Nah, Not a Security issue":"Reviewed - Not a CVE","Not Reviewed":"Not Reviewed"};
             const successMsg = "Status updated successfully";
             const failedMsg = "Error while updating Status";
             const infoMsg = "Please wait...";
             const noDataMsg  = "-- No data available --";
-            const apiPrefix = "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
-            const localPrefix = "http://localhost:5000/";
+            const env = 'devcluster'; //local
 
-            $( function() {
-                $.ajax({
-                    type:"GET",
-                    dataType: "json",
-                    url: apiPrefix + "cveapi/pCVE",
-                    success: function(result){
-                        var cveTable = setTableData(result);
-                        setTableEvents(cveTable);
-                        setFilters();
-                        var oTable = $('#cveData').dataTable();
-                        oTable.fnFilter( "Not Reviewed", statusCol,false,false);
-                    },
-                    complete: function(){
-                        showStatusMsg('info','',false,true,false);
-                    }
-                });
-                
-              } );
             $(document).ready( function () {
-                $("#from").datepicker("option", "maxDate", new Date());
-                $("#to").datepicker("option", "maxDate", new Date());
-                $('#showReviewedYesNo').prop('checked', false);
-                $('#showDemoItemsOnly').prop('checked', false);
-                $('#filter-div').hide();
+                loadData();
+                setDefaults();
                 setLoadEvents();
             } );
 

@@ -32,6 +32,7 @@ td {
     background-color: gray;
     text-align: center;
     float: right;
+    display: none;
 }
 
 #page-format{
@@ -165,6 +166,22 @@ td.details-control, td.actions-control, td.files-control {
     cursor: pointer;
 }
 
+#aboutpageicon{
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#aboutpage-div{
+    padding-right:40px;
+    padding-left:40px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border: 3px solid lightgray;
+    border-radius: 3px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
 /* td.details-control, td.actions-control, td.files-control {
     background: url('https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/images/sort_desc.png') no-repeat center center;
     cursor: pointer;

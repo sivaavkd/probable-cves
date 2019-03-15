@@ -112,6 +112,7 @@ function setTableData(cvedata){
             searchPlaceholder: "Search",
             search: "",
           },
+         //pageLength: 15,
          columns: [
             {   title: 'Details',
                     className: 'details-control',

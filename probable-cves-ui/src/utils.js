@@ -84,6 +84,9 @@ function setLoadEvents(){
             table.fnFilter("Not Reviewed", statusCol,false,false);
         }
     });
+    $("#aboutpageicon").on('click', function() {
+        toggleAbout();
+    });
 }
 
 function setFilters(){
@@ -147,7 +150,7 @@ function setTableEvents(cveTable){
              if (updateData == ''){return;}
              var saveData = $.ajax({
                  type: 'PUT',
-                 url: apiPrefix + "cveapi/pCVE/Status",
+                 url: getAPIPrefix(env) + "cveapi/pCVE/Status",
                  data: updateData,
                  dataType: 'json',
                  headers: { 

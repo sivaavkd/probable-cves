@@ -70,7 +70,7 @@ VALUES ('golang', 'kubernetes/dns', 'https://github.com/kubernetes/dns', 'kubern
 
 */
 
-create table probable_cves_review_history (
+create table probable_cves_history (
 history_id serial primary key,
 p_id INTEGER NOT NULL REFERENCES probable_cves(id),
 reviewed_at TIMESTAMP,
@@ -90,12 +90,12 @@ CREATE OR REPLACE FUNCTION proc_pCVE_audit() RETURNS TRIGGER AS $pCVE_audit$
         --
         IF (TG_OP = 'UPDATE') THEN
             IF (OLD.review_status = NEW.review_status) THEN
-                INSERT INTO probable_cves_review_history 
+                INSERT INTO probable_cves_history 
                 (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
                 SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Update',row_to_json(OLD.*);
                 RETURN OLD;
             ELSE
-                INSERT INTO probable_cves_review_history 
+                INSERT INTO probable_cves_history 
                 (p_id,reviewed_at,reviewed_by,review_status,review_comments,operation,row_data) 
                 SELECT OLD.id,OLD.reviewed_at,OLD.reviewed_by,OLD.review_status,OLD.review_comments,'Status',row_to_json(OLD.*);
                 RETURN OLD;

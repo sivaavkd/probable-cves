@@ -143,7 +143,8 @@ def getDataFromDB():
             select id, ecosystem, repository, repo_url, package, cause_type, 
             issue_date, issue_url, fixed_date, fixed_url, commit_date, commit_url, identified_date, identified_url,
             files_changed, review_status, reviewed_at, reviewed_by, cve_id, cve_date,
-            flagged_score, flagged_at, flagged_comments, additional_info, review_comments from probable_cves) temp"""
+            flagged_score, flagged_at, flagged_comments, additional_info, review_comments 
+            from probable_cves where cast(flagged_score as double precision) >= 0.30) temp"""
         cur.execute(sql_select_query)
         cvedata = cur.fetchall()
         # print(cvedata)

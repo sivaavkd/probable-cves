@@ -73,6 +73,18 @@ function  toggleFilters(){
      }
 }
 
+function  toggleAbout(){
+     var aboutText = setAboutText();
+     if (aboutText == '') {return;}
+     if ($('#aboutpage-div').is(":visible")){
+          $('#aboutpage-div').hide();
+     }
+     else{
+          //$('#aboutpage-div').text(aboutText);
+          $('#aboutpage-div').show();
+     }
+}
+
 function getUpdateData(row){
      var autocveid = row.data()["id"];
      var changedVal = StatusCode[$('#cveoptions'+ autocveid + ' :selected').text()];
@@ -139,6 +151,16 @@ function showInfoIcon(rowData){
      return iconStr;
 }
 
+function setDefaults(){
+     $("#from").datepicker("option", "maxDate", new Date());
+     $("#to").datepicker("option", "maxDate", new Date());
+     $('#showReviewedYesNo').prop('checked', false);
+     $('#showDemoItemsOnly').prop('checked', false);
+     $('#filter-div').hide(); 
+     $('#aboutpage-div').hide();
+     setHeading();
+     setUserInfo();
+}
 function showSpecificRows(values, table, colIndex, match){
      $.fn.dataTableExt.afnFiltering.push(
           function(settings, data, dataIndex) {
@@ -154,4 +176,54 @@ function showSpecificRows(values, table, colIndex, match){
      );
      table.fnDraw();
      $.fn.dataTableExt.afnFiltering.pop();
+}
+
+function loadData(){
+     $.ajax({
+          type:"GET",
+          dataType: "json",
+          url: getAPIPrefix(env) + "cveapi/pCVE",
+          beforeSend: function() {
+               showStatusMsg('info','',false,false,true);
+          },
+          success: function(result){
+              var cveTable = setTableData(result);
+              setTableEvents(cveTable);
+              setFilters();
+              var oTable = $('#cveData').dataTable();
+              oTable.fnFilter( "Not Reviewed", statusCol,false,false);
+          },
+          complete: function(){
+              showStatusMsg('info','',false,true,false);
+          }
+      });
+}
+
+function setAboutText(){
+     //return '';
+     var aboutText = '<b>Red Hat</b> is an enterprise software company with an open source development model. ' +
+       ' <br/> The result is better, more reliable, and more adaptable technologies. ' + 
+       ' <br/> More information about this can be found <a target=”_blank” href="https://drive.google.com/drive/u/1/folders/1HYgMvdC3zseNTMzUlhJ1OiwA4a5OD_NU">here</a>';
+       $("#aboutpage-div").html(aboutText);
+       return aboutText;
+}
+
+function setUserInfo(){
+     $("#user-div").html('<i class="fa fa-user-o"></i> ');
+     $("#user-div").append('Siva Kumar');
+     $("#useremail-div").text('sadhikar@redhat.com');
+}
+
+function setHeading(){
+     $("#heading-div").html('Golang for OCP - Potential Security Vulnerabilities');
+     $("#heading-div").append(' <i class="fa fa-question-circle" id="aboutpageicon" aria-hidden="true" title="About"></i> ');
+}
+
+function getAPIPrefix(env='local'){
+     if (env == 'local'){
+          return "http://localhost:5000/";
+     }
+     else if (env == 'devcluster'){
+          return "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
+     }
 }
