@@ -1,11 +1,9 @@
-function actionAllowed(){
-    return true;  // to do - implement logic to validate if the logged in user is allowed to take action or not.
-}
+
 
 function getDate( element ) {
     var date;
     try {
-      date = $.datepicker.parseDate( dateFormat, element.value );
+      date = $.datepicker.parseDate( CONST.dateFormat, element.value );
     } catch( error ) {
       date = null;
     }
@@ -61,7 +59,7 @@ function setLoadEvents(){
         $('#showReviewedYesNo').prop('checked', false);
         $('#showDemoItemsOnly').prop('checked', false);
         var oTable = $('#cveData').dataTable(); 
-        oTable.fnFilter("Not Reviewed", statusCol,false,false);
+        oTable.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
         var table = $('#cveData').DataTable(); 
         table.draw() ;
     });
@@ -69,7 +67,7 @@ function setLoadEvents(){
         var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
         if (! reviewedYesNo) {
             var table = $('#cveData').dataTable();
-            table.fnFilter("Not Reviewed", statusCol,false,false);
+            table.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
         } else {
             var oTable = $('#cveData').DataTable();
             oTable.search('').columns().search('').draw();
@@ -79,9 +77,9 @@ function setLoadEvents(){
         var showDemoItems = $('#showDemoItemsOnly').is(":checked");
         var table = $('#cveData').dataTable();
         if (showDemoItems) {
-            showSpecificRows(demoRows,table,idCol,true);
+            showSpecificRows(CONST.demoRows,table,CONST.idCol,true);
         } else {
-            table.fnFilter("Not Reviewed", statusCol,false,false);
+            table.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
         }
     });
     $("#aboutpageicon").on('click', function() {
@@ -96,7 +94,7 @@ function setFilters(){
             var fromDate = $("#from").val() ;
             var toDate = $('#to').val();
             
-            var rowDate = data[dateCol] || "1/1/1990";
+            var rowDate = data[CONST.dateCol] || "1/1/1990";
             if ( new Date(rowDate) < new Date(fromDate) || new Date(rowDate) > new Date(toDate) )
             {
                 return false;
@@ -150,7 +148,7 @@ function setTableEvents(cveTable){
              if (updateData == ''){return;}
              var saveData = $.ajax({
                  type: 'PUT',
-                 url: getAPIPrefix(env) + "cveapi/pCVE/Status",
+                 url: getAPIPrefix() + "cveapi/pCVE/Status",
                  data: updateData,
                  dataType: 'json',
                  headers: { 

@@ -1,12 +1,12 @@
 <html>
     <head>
         <title>Go CVEs </title>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <link rel="icon" type="image/png" href="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="index.css"></link>
+        <link rel="icon" type="image/png" href="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg"></link>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -15,6 +15,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+        <script src="constants.js"></script>
         <script src="index.js"></script>
         <script src="utils.js"></script>
         <script src="tables.js"></script>
@@ -64,16 +65,9 @@
         </div>
         
         <script>
-            const statusCol = 6;const orderCol = 3; const dateCol = 3; const dateFormat = "mm/dd/yy"; const idCol = 10;
-            const demoRows = ''; // [12,13];
-            const StatusCode = {"Hmm, Not sure":"Not Reviewed","Yes, Security issue":"Reviewed - Probable CVE","Nah, Not a Security issue":"Reviewed - Not a CVE","Not Reviewed":"Not Reviewed"};
-            const successMsg = "Status updated successfully";
-            const failedMsg = "Error while updating Status";
-            const infoMsg = "Please wait...";
-            const noDataMsg  = "-- No data available --";
-            const env = 'devcluster'; //local
-
+            
             $(document).ready( function () {
+                document.title = CONST.pageTitle;
                 loadData();
                 setDefaults();
                 setLoadEvents();

@@ -77,10 +77,9 @@ td {
 }
 
 #data-div{
-    padding-right:40px;
-    padding-left:40px;
+    padding-right:20px;
+    padding-left:20px;
     padding-bottom: 20px;
-    padding-top: 20px;
     margin-right:"auto";
     margin-left:"auto";
     border: 3px solid lightgray;
@@ -158,7 +157,7 @@ table.cvedata{
 }
 
 .filterbutton{
-    font-weight: bolder;
+    font-weight: bold;
     padding-left: 50px;
 }
 

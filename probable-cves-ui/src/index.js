@@ -25,7 +25,6 @@ function parseURLs(urlStrings,shortDescLength = 0,slashLastIndex = 1, shortDesc 
      else {urlStrArray = urlStrings.split(',');}
      urlStrArray.forEach(element => {
           finalStr = finalStr + getURLHTML(element,shortDescLength,slashLastIndex,shortDesc) + ', ';
-          //alert(finalStr);
      });
      finalStr = finalStr.substr(0,finalStr.length-2);
      return finalStr;
@@ -45,10 +44,10 @@ function parseFilesChanged(rowData){
 
 function getFileHTML(str){
      if (str.indexOf('.patch') == -1){
-          return '<tr><td><i>File name</i></td><td>' + str + '</td></tr>';
+          return '<tr><td><i>' + DETAILS.FileName + '</i></td><td>' + str + '</td></tr>';
      }
      else {
-          return '<tr><td><b>Patch link</b></td><td>' + getURLHTML(str,13) + '</td></tr>';
+          return '<tr><td><b>' + DETAILS.Patch + '</b></td><td>' + getURLHTML(str,13) + '</td></tr>';
      }
 }
 
@@ -66,7 +65,7 @@ function  toggleFilters(){
      }
      else{
           $('#filter-div').show();
-          if (demoRows == '') {
+          if (CONST.demoRows == '') {
                $('#showDemoItemsOnly').hide();
                $('#showDemoItemsSpan').text('');
            }
@@ -80,15 +79,14 @@ function  toggleAbout(){
           $('#aboutpage-div').hide();
      }
      else{
-          //$('#aboutpage-div').text(aboutText);
           $('#aboutpage-div').show();
      }
 }
 
 function getUpdateData(row){
      var autocveid = row.data()["id"];
-     var changedVal = StatusCode[$('#cveoptions'+ autocveid + ' :selected').text()];
-     if (changedVal == undefined) { showStatusMsg('error','Please select an Action !',false); return '';}
+     var changedVal = CONST.StatusCode[$('#cveoptions'+ autocveid + ' :selected').text()];
+     if (changedVal == undefined) { showStatusMsg('error',CONST.selectActionMsg,false); return '';}
      var updatedBy= $('#useremail-div').text();
      var updateComments = $('#reviewcomments'+autocveid).val();
      var reviewedAt = new Date($.now());
@@ -99,15 +97,15 @@ function showStatusMsg(Msgtype = 'success', message = '',isReload = true, autoHi
      var $statusdiv;
      if(Msgtype == 'success') {
           $statusdiv = $("#status-msg");
-          $statusdiv.text((message === '') ? successMsg : message);
+          $statusdiv.text((message === '') ? CONST.successMsg : message);
      }
      else if(Msgtype == 'error'){
           $statusdiv = $("#status-err");
-          $statusdiv.text((message === '') ? failedMsg : message);
+          $statusdiv.text((message === '') ? CONST.failedMsg : message);
      }
      else if(Msgtype == 'info'){
           $statusdiv = $("#status-info");
-          $statusdiv.text((message === '') ? infoMsg : message);
+          $statusdiv.text((message === '') ? CONST.infoMsg : message);
      }
      if (isShow) {$statusdiv.show();}
      else {$statusdiv.hide(); return;}
@@ -115,7 +113,7 @@ function showStatusMsg(Msgtype = 'success', message = '',isReload = true, autoHi
           setTimeout(function(){
                $statusdiv.hide();
                if (isReload) {location.reload();}
-          },2000);
+          },CONST.timeoutReload);
      }
 }
 
@@ -124,9 +122,9 @@ function showCVECause(rowData,bDate=false){
           if (bDate){ return rowData.issue_date; }
           else {return parseURLs(rowData.issue_url,0,1,rowData.cause_type);}
      }
-     else if (rowData.cause_type == 'PR'){
+     else if (rowData.cause_type == 'PR' || rowData.cause_type == 'Pull Request'){
           if (bDate){ return rowData.fixed_date; }
-          else { return parseURLs(fixed_url,0,1,rowData.cause_type);}
+          else { return parseURLs(rowData.fixed_url,0,1,rowData.cause_type);}
      }
      else if (rowData.cause_type == 'Commit'){
           if (bDate){ return rowData.commit_date; }
@@ -139,7 +137,6 @@ function showCVECause(rowData,bDate=false){
 }
 
 function showScore(score){
-     //return (parseFloat(score) * 100).toFixed(2);
      return (Math.floor(parseFloat(score) * 100)).toString() + '%';
 }
 
@@ -147,7 +144,6 @@ function showInfoIcon(rowData){
      var iconStr = '';
      if (rowData.cve_id != null && rowData.cve_id != '') 
      { iconStr = iconStr + '<i title="' + rowData.cve_id + '" class="fa fa-info-circle"></i>';}
-     //iconStr = iconStr + '<i class="fa fa-info-circle"></i>';
      return iconStr;
 }
 
@@ -161,14 +157,15 @@ function setDefaults(){
      setHeading();
      setUserInfo();
 }
-function showSpecificRows(values, table, colIndex, match){
+function showSpecificRows(valueStr, table, colIndex, exactMatch){
+     values = valueStr.split(',');
      $.fn.dataTableExt.afnFiltering.push(
           function(settings, data, dataIndex) {
                for (i=0;i<values.length;i++) {
-                    if (match) {
-                         if (data[colIndex] == values[i]) return true;
+                    if (exactMatch) {
+                         if (data[colIndex] == values[i]) {return true;}
                     } else {
-                         if (data[colIndex].indexOf(values[i])>=0) return true;
+                         if (data[colIndex].indexOf(values[i])>=0) {return true;}
                     }     
                }
                return false;
@@ -182,7 +179,7 @@ function loadData(){
      $.ajax({
           type:"GET",
           dataType: "json",
-          url: getAPIPrefix(env) + "cveapi/pCVE",
+          url: getAPIPrefix() + "cveapi/pCVE",
           beforeSend: function() {
                showStatusMsg('info','',false,false,true);
           },
@@ -191,7 +188,7 @@ function loadData(){
               setTableEvents(cveTable);
               setFilters();
               var oTable = $('#cveData').dataTable();
-              oTable.fnFilter( "Not Reviewed", statusCol,false,false);
+              oTable.fnFilter( CONST.notReviewed, CONST.statusCol,false,false);
           },
           complete: function(){
               showStatusMsg('info','',false,true,false);
@@ -214,16 +211,21 @@ function setUserInfo(){
      $("#useremail-div").text('sadhikar@redhat.com');
 }
 
+function actionAllowed(){
+     return true;  // to do - implement logic to validate if the logged in user is allowed to take action or not.
+ }
+
 function setHeading(){
-     $("#heading-div").html('Golang for OCP - Potential Security Vulnerabilities');
+     $("#heading-div").html(CONST.heading);
+     if (setAboutText() == '') {return;}
      $("#heading-div").append(' <i class="fa fa-question-circle" id="aboutpageicon" aria-hidden="true" title="About"></i> ');
 }
 
-function getAPIPrefix(env='local'){
-     if (env == 'local'){
+function getAPIPrefix(){
+     if (CONST.env == 'local'){
           return "http://localhost:5000/";
      }
-     else if (env == 'devcluster'){
+     else if (CONST.env == 'devcluster'){
           return "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
      }
 }
