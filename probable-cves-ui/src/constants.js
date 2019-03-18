@@ -38,7 +38,15 @@ const GRID = {
     btnCSV: 'CSV',
     ExportColumns: [9,1,2,3,5,7],
     btnFilters: 'Filters',
-    Search: 'Search'
+    Search: 'Search',
+    filterEcosystem: 'Ecosystem:',
+    filtereco1: 'Golang',
+    filterFrom: 'From Date:',
+    filterTo: 'to',
+    btnFilter: 'Filter',
+    btnClear: 'Clear',
+    onlyDemoRows: 'Show only Demo Rows',
+    includeReviewed: 'Include Reviewed Rows'
 }
 
 const DETAILS = {

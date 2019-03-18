@@ -46,14 +46,20 @@
                 <table id="cvedatafilter" class="cvedatafilter">
                     <tbody>
                         <tr>
-                            <td>From Date:</td>
+                            <td id="filterecosystem"></td>
+                            <td>
+                                <select class="filtereco" id="filtereco">
+                                    <option class="filtereco1" id="filtereco1"></option>
+                                </select>
+                            </td>
+                            <td id="filterfromdate"></td>
                             <td><input type="text" id="from" name="from"></td>
-                            <td>to:</td>
+                            <td id="filtertodate"></td>
                             <td><input type="text" id="to" name="to"></td>
-                            <td><button type="button" id="btnShowData" value="btnShowData">Filter</button></td>
-                            <td><input type="checkbox" name="includeReviewed" value="No" id="showReviewedYesNo"> Include Reviewed Rows</td>
-                            <td><input type="checkbox" name="showDemoItemsOnly" value="No" id="showDemoItemsOnly"> <span id="showDemoItemsSpan">Show only Demo Rows</span></td>
-                            <td><button type="button" id="btnClearFilters" value="btnClearFilters">Clear</button></td>
+                            <td><button type="button" id="btnShowData" value="btnShowData"></button></td>
+                            <td><input type="checkbox" name="includeReviewed" value="No" id="showReviewedYesNo"><span id="showReviewedSpan"></span></td>
+                            <td><input type="checkbox" name="showDemoItemsOnly" value="No" id="showDemoItemsOnly"> <span id="showDemoItemsSpan"></span></td>
+                            <td><button type="button" id="btnClearFilters" value="btnClearFilters"></button></td>
                         </tr>
                     </tbody>
                 </table>

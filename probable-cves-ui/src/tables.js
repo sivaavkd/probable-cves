@@ -112,7 +112,7 @@ function setTableData(cvedata){
          ],
          language: {
             searchPlaceholder: GRID.Search,
-            search: "",
+            search: ""
           },
          //pageLength: 15,
          columns: [

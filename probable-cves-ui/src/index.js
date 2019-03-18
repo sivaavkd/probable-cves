@@ -156,6 +156,14 @@ function setDefaults(){
      $('#aboutpage-div').hide();
      setHeading();
      setUserInfo();
+     $('#filterecosystem').text(GRID.filterEcosystem);
+     $('#filtereco1').text(GRID.filtereco1);
+     $('#filterfromdate').text(GRID.filterFrom);
+     $('#filtertodate').text(GRID.filterTo);
+     $('#btnShowData').text(GRID.btnFilter);
+     $('#showReviewedSpan').text(GRID.includeReviewed);
+     $('#showDemoItemsSpan').text(GRID.onlyDemoRows);
+     $('#btnClearFilters').text(GRID.btnClear);
 }
 function showSpecificRows(valueStr, table, colIndex, exactMatch){
      values = valueStr.split(',');
