@@ -43,7 +43,10 @@ function parseFilesChanged(rowData){
 }
 
 function getFileHTML(str){
-     if (str.indexOf('.patch') == -1){
+     if (str.indexOf('->') != -1 ){
+          return '<tr><td><b>' + DETAILS.repoPath + '</b></td><td>' + str + '</td></tr>';
+     }
+     else if (str.indexOf('.patch') == -1){
           return '<tr><td><i>' + DETAILS.FileName + '</i></td><td>' + str + '</td></tr>';
      }
      else {
@@ -160,27 +163,10 @@ function setDefaults(){
      $('#filtereco1').text(GRID.filtereco1);
      $('#filterfromdate').text(GRID.filterFrom);
      $('#filtertodate').text(GRID.filterTo);
-     $('#btnShowData').text(GRID.btnFilter);
+     $('#btnFilterData').text(GRID.btnFilter);
      $('#showReviewedSpan').text(GRID.includeReviewed);
      $('#showDemoItemsSpan').text(GRID.onlyDemoRows);
      $('#btnClearFilters').text(GRID.btnClear);
-}
-function showSpecificRows(valueStr, table, colIndex, exactMatch){
-     values = valueStr.split(',');
-     $.fn.dataTableExt.afnFiltering.push(
-          function(settings, data, dataIndex) {
-               for (i=0;i<values.length;i++) {
-                    if (exactMatch) {
-                         if (data[colIndex] == values[i]) {return true;}
-                    } else {
-                         if (data[colIndex].indexOf(values[i])>=0) {return true;}
-                    }     
-               }
-               return false;
-          }     
-     );
-     table.fnDraw();
-     $.fn.dataTableExt.afnFiltering.pop();
 }
 
 function loadData(){
@@ -219,8 +205,11 @@ function setUserInfo(){
      $("#useremail-div").text('sadhikar@redhat.com');
 }
 
-function actionAllowed(){
-     return true;  // to do - implement logic to validate if the logged in user is allowed to take action or not.
+function actionAllowed(rowdata){
+     if (rowdata.cve_id == undefined || rowdata.cve_id == null || rowdata.cve_id == ''){
+          return true;
+     }
+     return false;  // to do - implement logic to validate if the logged in user is allowed to take action or not.
  }
 
 function setHeading(){

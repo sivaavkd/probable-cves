@@ -50,14 +50,16 @@ function setLoadEvents(){
         .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );
         });
-    $("#btnShowData").on('click', function() { 
-        if ($("#from").val() == "" || $('#to').val() == "") {return;} 
-        var table = $('#cveData').DataTable(); table.draw() ; 
+    $("#btnFilterData").on('click', function() { 
+        if ($("#from").val() == "" || $('#to').val() == "") {return;}
+        var table = $('#cveData').DataTable(); table.draw() ;
     });
     $("#btnClearFilters").on('click', function() { 
-        $("#from").val(""); $('#to').val(""); 
-        $('#showReviewedYesNo').prop('checked', false);
-        $('#showDemoItemsOnly').prop('checked', false);
+        $("#from").val(""); $('#to').val("");
+        var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
+        if (reviewedYesNo) {$('#showReviewedYesNo').click();}
+        var showDemoItems = $('#showDemoItemsOnly').is(":checked");
+        if (showDemoItems) {$('#showDemoItemsOnly').click();}
         var oTable = $('#cveData').dataTable(); 
         oTable.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
         var table = $('#cveData').DataTable(); 
@@ -75,13 +77,16 @@ function setLoadEvents(){
     });
     $("#showDemoItemsOnly").on('click', function() { 
         var showDemoItems = $('#showDemoItemsOnly').is(":checked");
-        var table = $('#cveData').dataTable();
-        if (showDemoItems) {
-            showSpecificRows(CONST.demoRows,table,CONST.idCol,true);
-        } else {
-            table.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
+        var table = $('#cveData').DataTable();
+        if (showDemoItems){
+            table.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
+        }
+        else {
+            table.search('').columns().search('').draw();
+            table.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
         }
     });
+
     $("#aboutpageicon").on('click', function() {
         toggleAbout();
     });
@@ -93,7 +98,6 @@ function setFilters(){
         function( settings, data, dataIndex ) {
             var fromDate = $("#from").val() ;
             var toDate = $('#to').val();
-            
             var rowDate = data[CONST.dateCol] || "1/1/1990";
             if ( new Date(rowDate) < new Date(fromDate) || new Date(rowDate) > new Date(toDate) )
             {
@@ -105,18 +109,6 @@ function setFilters(){
 }
 
 function setTableEvents(cveTable){
-    
-    $('#cveData tbody').on(
-         'click', '.filespopup', function () {
-         var toptr = $(this).closest('tr').parents('tr');  //this is the top tr of the child row
-         var tr = toptr.prev('tr')[0];
-         var row = cveTable.row( tr );
-         showFilesPopup(row);
-     });
-    $('#cveData tbody').on(
-        'click', '.filespopupclose', function () {
-        closeFilesPopup();
-    });
     
     $('#cveData tbody').on(
         'click', 'td.files-control', function () {

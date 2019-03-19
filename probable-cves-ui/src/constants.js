@@ -6,18 +6,19 @@ const CONST = {
     orderCol : 3,  
     dateCol : 3,  
     dateFormat : 'mm/dd/yy',  
-    idCol : 10,
-    demoRows : '23,21,87,6,111,166,65,41,190,136,27', // '',
+    idCol : 9,
+    //demoRows : '23,21,87,6,111,166,65,41,190,136,27', // '',
+    demoRows : '^23$|^47$|^190$|^10$|^26$|^27$|^111$|^166$|^90$|^168$|^110$|^182$',
     StatusCode : {"Hmm, Not sure":"Not Reviewed","Yes, Security issue":"Reviewed - Probable CVE","Nah, Not a Security issue":"Reviewed - Not a CVE","Not Reviewed":"Not Reviewed"},
     successMsg : 'Status updated successfully',
     failedMsg : 'Error while updating Status',
     selectActionMsg: 'Please select an Action !',
     infoMsg : 'Please wait...',
     noDataMsg  : '-- No data available --',
-    heading: 'Golang for OCP - Potential Security Vulnerabilities',
+    heading: 'Potential Security Vulnerabilities for OCP',
     timeoutReload: 2000,
     notReviewed: 'Not Reviewed',
-    pageTitle: 'Golang for OCP - Potential CVEs'
+    pageTitle: 'OCP - Potential CVEs'
 }
 
 const GRID = {
@@ -25,7 +26,7 @@ const GRID = {
     Repository: 'Repository',
     IdentifiedBy : 'Identified by',
     IdentifiedDate : 'Identified date',  
-    FilesChanged : 'Files changed',  
+    FilesChanged : 'Files',  
     Confidence : 'Confidence',  
     StatusNumber : 'Status Number',
     Status : 'Status',
@@ -45,8 +46,9 @@ const GRID = {
     filterTo: 'to',
     btnFilter: 'Filter',
     btnClear: 'Clear',
-    onlyDemoRows: 'Show only Demo Rows',
-    includeReviewed: 'Include Reviewed Rows'
+    onlyDemoRows: 'Show Filtered Data',
+    includeReviewed: 'Include Reviewed Rows',
+    cveReviewed: 'CVE Created'
 }
 
 const DETAILS = {
@@ -61,6 +63,7 @@ const DETAILS = {
     sysID: 'System ID:',
     FileName: 'File name',
     Patch: 'Patch link',
+    repoPath: 'Repo Path',
     Comments: 'Comments',
     CommentsOptional: '(Optional)',
     action: 'Action:',

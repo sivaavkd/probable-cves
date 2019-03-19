@@ -1,6 +1,5 @@
 function childActionsFormat ( rowData ) {
     var id = rowData.id;
-    if (! actionAllowed()){ return '';}
     return '<table class="actionstable">'+
               '<tr>'+
                    '<td><b>' + DETAILS.Comments + '</b></td>'+
@@ -67,7 +66,8 @@ function toggleChildTable (tr,row,childType){
     else {
     // Open this row
     if (childType == 'Actions'){
-         row.child( childActionsFormat(row.data()) ).show();
+        if (! actionAllowed(row.data())){ return;}
+        row.child( childActionsFormat(row.data()) ).show();
     }
     else if (childType == 'Details'){
          row.child( childDetailsFormat(row.data()) ).show();
@@ -156,21 +156,25 @@ function setTableData(cvedata){
                     }
                 },
                 {   title: GRID.StatusNumber, data: "review_status", visible: false },
-                {   title: GRID.Status, data: "review_status" },
+                {   title: GRID.Status, data: "review_status",
+                    render: function (data, type, row, meta) {
+                        if (row.cve_id != undefined || row.cve_id != null){
+                            return GRID.cveReviewed;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
                 {   title: GRID.Actions, data: null,
                     render: function (data, type, row, meta) {
-                        return '<i class="fa fa-ellipsis-v"></i>';
+                        if (row.cve_id == undefined || row.cve_id == null){
+                            return '<i class="fa fa-ellipsis-v"></i>';
+                        }
                     },
                     className: 'actions-control',
                     defaultContent: '',
                     sortable: false 
-                },
-                {   data: null,
-                sortable: false,
-                defaultContent: '',
-                render: function (data, type, row, meta) {
-                    return showInfoIcon(row);
-                }
                 },
                 {   title: GRID.SNo, data: "id", visible: false }
          ],
