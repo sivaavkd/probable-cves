@@ -49,11 +49,15 @@ function childDetailsFormat ( rowData ) {
 }
 
 function childFilesFormat ( rowData ) {
-    if (rowData.files_changed == undefined || rowData.files_changed == null || rowData.files_changed == ''){
-         return CONST.noDataMsg;
-    }
+    var filesInfo = parseFilesChanged(rowData);
+    // if (rowData.files_changed == undefined || rowData.files_changed == null || rowData.files_changed == ''){
+    //      return CONST.noDataMsg;
+    // }
+    if (filesInfo == undefined || filesInfo == null || filesInfo == ''){
+             return CONST.noDataMsg;
+        }
     return  '<table class="filestable">'+
-              parseFilesChanged(rowData) +
+                filesInfo +
             '</table>';
 }
 

@@ -71,5 +71,6 @@ const DETAILS = {
     ActionsOptions1: 'Yes, Security issue',
     ActionsOptions2: 'Nah, Not a Security issue',
     ActionsOptions3: 'Hmm, Not sure',
-    actionsSave: 'Save'
+    actionsSave: 'Save',
+    repoPathJSON: 'repo_path'
 }

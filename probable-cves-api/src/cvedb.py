@@ -1,6 +1,6 @@
 import json
 import psycopg2
-from cveconfig import readconfig
+from cveconfig import readconfig,readconfigEnv
 
 def updateDataToDB(cveobj):
     """ Connect to the PostgreSQL database server """
@@ -11,7 +11,7 @@ def updateDataToDB(cveobj):
     conn = None
     resultData = None
     try:
-        params = readconfig()
+        params = readconfigEnv()
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
@@ -52,7 +52,7 @@ def updateStatusToDB(status,autoid,reviewed_by,review_comments):
     conn = None
     cvedata = None
     try:
-        params = readconfig()
+        params = readconfigEnv()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         sql_update_query = """UPDATE probable_cves set review_status = %s ,reviewed_by = %s,  
@@ -82,7 +82,7 @@ def deleteDataFromDB(autoid):
     conn = None
     cvedata = None
     try:
-        params = readconfig()
+        params = readconfigEnv()
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
@@ -110,7 +110,7 @@ def insertDataToDB(ecosystem,package,commit,causeddate,confidence,status):
     cvedata = None
     retVal = False
     try:
-        params = readconfig()
+        params = readconfigEnv()
         print('insert - connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
@@ -135,7 +135,7 @@ def getDataFromDB():
     conn = None
     cvedata = ""
     try:
-        params = readconfig()
+        params = readconfigEnv()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         
@@ -147,7 +147,6 @@ def getDataFromDB():
             from probable_cves where cast(flagged_score as double precision) >= 0.30) temp"""
         cur.execute(sql_select_query)
         cvedata = cur.fetchall()
-        # print(cvedata)
         cvedata = json.dumps(cvedata).lstrip('[').rstrip(']')
         cvedata = "[" + cvedata + "]"
     except (Exception, psycopg2.DatabaseError) as error:
