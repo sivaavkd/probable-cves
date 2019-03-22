@@ -77,10 +77,9 @@ function setLoadEvents(){
         if (reviewedYesNo) {$('#showReviewedYesNo').click();}
         var showDemoItems = $('#showDemoItemsOnly').is(":checked");
         if (showDemoItems) {$('#showDemoItemsOnly').click();}
-        var oTable = $('#cveData').dataTable(); 
-        oTable.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
         var table = $('#cveData').DataTable(); 
-        table.draw() ;
+        table.search('').columns().search('').draw();
+        table.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
     });
     $("#showReviewedYesNo").on('click', function() { 
         showFilteredData();

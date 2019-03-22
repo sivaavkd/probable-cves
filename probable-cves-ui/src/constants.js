@@ -1,6 +1,6 @@
 
 const CONST = {
-    env: 'devcluster',
+    env: 'system',
     successMsg: 'Status updated successfully',
     statusCol : 6,
     orderCol : 3,  
@@ -48,7 +48,7 @@ const GRID = {
     btnClear: 'Clear',
     onlyDemoRows: 'Show Filtered Data',
     includeReviewed: 'Include Reviewed Rows',
-    cveReviewed: 'CVE Created'
+    cveCreated: 'CVE Created'
 }
 
 const DETAILS = {

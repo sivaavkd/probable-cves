@@ -264,12 +264,12 @@ function getAPIPrefix(){
      else if (CONST.env == 'devcluster'){
           return "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
      }
-     // else if (CONST.env == 'system'){
-     //      if (APIENV.env == null) {
-     //           return "http://localhost:5000/";
-     //      }
-     //      else {
-     //           return "http://" + APIENV.env + "/";
-     //      }
-     // }
+     else if (CONST.env == 'system'){
+          if (APIENV.env == null) {
+               return "http://localhost:5000/";
+          }
+          else {
+               return "http://" + APIENV.env + "/";
+          }
+     }
 }

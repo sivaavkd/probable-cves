@@ -50,9 +50,6 @@ function childDetailsFormat ( rowData ) {
 
 function childFilesFormat ( rowData ) {
     var filesInfo = parseFilesChanged(rowData);
-    // if (rowData.files_changed == undefined || rowData.files_changed == null || rowData.files_changed == ''){
-    //      return CONST.noDataMsg;
-    // }
     if (filesInfo == undefined || filesInfo == null || filesInfo == ''){
              return CONST.noDataMsg;
         }
@@ -163,7 +160,7 @@ function setTableData(cvedata){
                 {   title: GRID.Status, data: "review_status",
                     render: function (data, type, row, meta) {
                         if (row.cve_id != undefined || row.cve_id != null){
-                            return GRID.cveReviewed;
+                            return GRID.cveCreated;
                         }
                         else {
                             return data;
