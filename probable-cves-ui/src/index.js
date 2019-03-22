@@ -192,9 +192,36 @@ function loadData(){
           success: function(result){
               var cveTable = setTableData(result);
               setTableEvents(cveTable);
-              setFilters();
+              setDateFilters();
               var oTable = $('#cveData').dataTable();
               oTable.fnFilter( CONST.notReviewed, CONST.statusCol,false,false);
+          },
+          complete: function(){
+              showStatusMsg('info','',false,true,false);
+          }
+      });
+}
+
+function reloadData(cveTable){
+     $.ajax({
+          type:"GET",
+          dataType: "json",
+          url: getAPIPrefix() + "cveapi/pCVE",
+          beforeSend: function() {
+               showStatusMsg('info','',false,false,true);
+          },
+          success: function(result){
+               cveTable.clear();
+               cveTable.rows.add(result);
+               if ($('#showReviewedYesNo').is(":checked")){
+                    cveTable.search('').columns().search('').draw();
+               }
+               if ($('#showDemoItemsOnly').is(":checked")){
+                    cveTable.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
+               }
+               else if (! $('#showReviewedYesNo').is(":checked")){
+                    cveTable.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
+               }
           },
           complete: function(){
               showStatusMsg('info','',false,true,false);
@@ -237,7 +264,12 @@ function getAPIPrefix(){
      else if (CONST.env == 'devcluster'){
           return "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
      }
-     else if (CONST.env == 'system'){
-          return "";
-     }
+     // else if (CONST.env == 'system'){
+     //      if (APIENV.env == null) {
+     //           return "http://localhost:5000/";
+     //      }
+     //      else {
+     //           return "http://" + APIENV.env + "/";
+     //      }
+     // }
 }
