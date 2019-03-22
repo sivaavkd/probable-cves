@@ -5,7 +5,7 @@ const CONST = {
     statusCol : 6,
     orderCol : 3,  
     dateCol : 3,  
-    dateFormat : 'mm/dd/yy',  
+    dateFormat : 'yy-mm-dd',  
     idCol : 9,
     //demoRows : '23,21,87,6,111,166,65,41,190,136,27', // '',
     demoRows : '^23$|^47$|^190$|^10$|^26$|^27$|^111$|^166$|^90$|^168$|^110$|^182$|^196$|^197$|^198$',
@@ -18,7 +18,7 @@ const CONST = {
     heading: 'Potential Security Vulnerabilities for OCP',
     timeoutReload: 2000,
     notReviewed: 'Not Reviewed',
-    pageTitle: 'OCP - Potential CVEs'
+    pageTitle: 'OCP - Potential Vulnerabilities'
 }
 
 const GRID = {

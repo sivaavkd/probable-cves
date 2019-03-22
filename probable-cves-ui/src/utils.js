@@ -7,55 +7,72 @@ function getDate( element ) {
     } catch( error ) {
       date = null;
     }
-
     return date;
 }
 
-function strToDate(dateStr,format) {
-    format = format || "mm/dd/yy";
+function strToDate(dateStr) {
+    var format=CONST.dateFormat;
     if (format == "mm/dd/yy"){
          var parts = dateStr.split("/");
-         return new Date(parts[1], parts[2] - 1, parts[0]);
+         return new Date(parts[2], parts[0] - 1, parts[1]);
     }
     if (format == "dd/mm/yy"){
          var parts = dateStr.split("/");
          return new Date(parts[2], parts[1] - 1, parts[0]);
     }
-    if (format == "dd-mm-yyyy"){
+    if (format == "dd-mm-yy"){
          var parts = dateStr.split("-");
          return new Date(parts[2], parts[1] - 1, parts[0]);
     }
+    if (format == "mm-dd-yy"){
+        var parts = dateStr.split("-");
+        return new Date(parts[2], parts[0] - 1, parts[1]);
+    }
+    if (format == "yy-mm-dd"){
+        var parts = dateStr.split("-");
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+    if (format == "yy-mm-dd"){
+        var parts = dateStr.split("/");
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
 }
 
-function toDate(selector) {
-    var from = $(selector).val().split("-");
-    return new Date(from[1], from[2] - 1, from[0]);
-}
-
-function setLoadEvents(){
+function resetDates(){
     from = $( "#from" )
         .datepicker({
             defaultDate: "+1w",
             changeMonth: true,
-            numberOfMonths: 1
+            numberOfMonths: 1,
+            dateFormat: CONST.dateFormat
         })
         .on( "change", function() {
             to.datepicker( "option", "minDate", getDate( this ) );
-        }),
-        to = $( "#to" ).datepicker({
+    });
+    to = $( "#to" ).datepicker({
         defaultDate: "+1w",
         changeMonth: true,
-        numberOfMonths: 1
+        numberOfMonths: 1,
+        dateFormat: CONST.dateFormat
         })
         .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );
-        });
+    });
+    $('#to').val(""); $("#from").val("");
+    from.datepicker( "option", "maxDate", null );
+    to.datepicker( "option", "minDate", null );
+}
+
+function setLoadEvents(){
+    resetDates();
     $("#btnFilterData").on('click', function() { 
         if ($("#from").val() == "" || $('#to').val() == "") {return;}
         var table = $('#cveData').DataTable(); table.draw() ;
     });
     $("#btnClearFilters").on('click', function() { 
-        $("#from").val(""); $('#to').val("");
+        //$('#to').val(""); $("#from").val("");
+        resetDates();
         var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
         if (reviewedYesNo) {$('#showReviewedYesNo').click();}
         var showDemoItems = $('#showDemoItemsOnly').is(":checked");
@@ -66,25 +83,10 @@ function setLoadEvents(){
         table.draw() ;
     });
     $("#showReviewedYesNo").on('click', function() { 
-        var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
-        if (! reviewedYesNo) {
-            var table = $('#cveData').dataTable();
-            table.fnFilter(CONST.notReviewed, CONST.statusCol,false,false);
-        } else {
-            var oTable = $('#cveData').DataTable();
-            oTable.search('').columns().search('').draw();
-        }
+        showFilteredData();
     });
     $("#showDemoItemsOnly").on('click', function() { 
-        var showDemoItems = $('#showDemoItemsOnly').is(":checked");
-        var table = $('#cveData').DataTable();
-        if (showDemoItems){
-            table.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
-        }
-        else {
-            table.search('').columns().search('').draw();
-            table.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
-        }
+        showFilteredData();
     });
 
     $("#aboutpageicon").on('click', function() {
@@ -92,14 +94,36 @@ function setLoadEvents(){
     });
 }
 
-function setFilters(){
+function showFilteredData(){
+    var showDemoItems = $('#showDemoItemsOnly').is(":checked");
+    var reviewedYesNo = $('#showReviewedYesNo').is(":checked");
+    var table = $('#cveData').DataTable();
+    if (showDemoItems && reviewedYesNo){
+        table.search('').columns().search('').draw();
+        table.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
+    }
+    else if (showDemoItems){
+        table.search('').columns().search('').draw();
+        table.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
+        table.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
+    }
+    else if (reviewedYesNo){
+        table.search('').columns().search('').draw();
+    }
+    else {
+        table.search('').columns().search('').draw();
+        table.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
+    }
+}
+
+function setDateFilters(){
     /* Custom filtering function which will search data in column four between two values */
     $.fn.dataTable.ext.search.push(
         function( settings, data, dataIndex ) {
-            var fromDate = $("#from").val() ;
-            var toDate = $('#to').val();
-            var rowDate = data[CONST.dateCol] || "1/1/1990";
-            if ( new Date(rowDate) < new Date(fromDate) || new Date(rowDate) > new Date(toDate) )
+            var fromDate = $("#from").val() || "1100/01/01";
+            var toDate = $('#to').val() || "9999/12/31";
+            var rowDate = data[CONST.dateCol] || "1100/01/01";
+            if ( strToDate(rowDate) < strToDate(fromDate) || strToDate(rowDate) > strToDate(toDate) )
             {
                 return false;
             }
@@ -151,8 +175,7 @@ function setTableEvents(cveTable){
                      showStatusMsg('info','',false,false);
                  },
                  success: function(resultData) {
-                     showStatusMsg('info','',false,false,false);
-                     showStatusMsg();
+                    reloadData(cveTable);
                  }
              });
          } 
