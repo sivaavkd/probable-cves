@@ -31,22 +31,34 @@ function parseURLs(urlStrings,shortDescLength = 0,slashLastIndex = 1, shortDesc 
 }
 
 function parseFilesChanged(rowData){
-     filesChanged = rowData.files_changed;
+     var filesChanged = rowData.files_changed == null ? '' : rowData.files_changed;
+     var additionalInfo = rowData.additional_info == null ? '' : rowData.additional_info;
      var filesArray = '';
      var finalStr = '';
-     if (filesChanged.indexOf(',') == -1) {filesArray = filesChanged;}
-     else {filesArray = filesChanged.split(',');}
-     filesArray.forEach(element => {
-          finalStr = finalStr + getFileHTML(element);
-     });
+     if (filesChanged != ''){
+          if (filesChanged.indexOf(',') == -1) {filesArray = filesChanged;}
+          else {filesArray = filesChanged.split(',');}
+          filesArray.forEach(element => {
+               finalStr = finalStr + getFileHTML(element);
+          });
+     }
+     if (additionalInfo != ''){ finalStr = getRepoPath(additionalInfo) + finalStr;}
      return finalStr;
 }
 
-function getFileHTML(str){
-     if (str.indexOf('->') != -1 ){
-          return '<tr><td><b>' + DETAILS.repoPath + '</b></td><td>' + str + '</td></tr>';
+function getRepoPath(moreInfo){
+     var repopath = moreInfo[DETAILS.repoPathJSON];
+     if (repopath == undefined || repopath == null || repopath == '') {
+          repopath=''; 
      }
-     else if (str.indexOf('.patch') == -1){
+     else {
+          repopath = '<tr><td><b>' + DETAILS.repoPath + '</b></td><td>' + repopath + '</td></tr>';
+     }
+     return repopath;
+}
+
+function getFileHTML(str){
+     if (str.indexOf('.patch') == -1){
           return '<tr><td><i>' + DETAILS.FileName + '</i></td><td>' + str + '</td></tr>';
      }
      else {
@@ -180,9 +192,36 @@ function loadData(){
           success: function(result){
               var cveTable = setTableData(result);
               setTableEvents(cveTable);
-              setFilters();
+              setDateFilters();
               var oTable = $('#cveData').dataTable();
               oTable.fnFilter( CONST.notReviewed, CONST.statusCol,false,false);
+          },
+          complete: function(){
+              showStatusMsg('info','',false,true,false);
+          }
+      });
+}
+
+function reloadData(cveTable){
+     $.ajax({
+          type:"GET",
+          dataType: "json",
+          url: getAPIPrefix() + "cveapi/pCVE",
+          beforeSend: function() {
+               showStatusMsg('info','',false,false,true);
+          },
+          success: function(result){
+               cveTable.clear();
+               cveTable.rows.add(result);
+               if ($('#showReviewedYesNo').is(":checked")){
+                    cveTable.search('').columns().search('').draw();
+               }
+               if ($('#showDemoItemsOnly').is(":checked")){
+                    cveTable.columns(CONST.idCol).search(CONST.demoRows, true, false, true).draw();
+               }
+               else if (! $('#showReviewedYesNo').is(":checked")){
+                    cveTable.columns(CONST.statusCol).search(CONST.notReviewed, false, false, true).draw();
+               }
           },
           complete: function(){
               showStatusMsg('info','',false,true,false);
@@ -224,5 +263,13 @@ function getAPIPrefix(){
      }
      else if (CONST.env == 'devcluster'){
           return "http://probable-cve-api-probable-cve.devtools-dev.ext.devshift.net/";
+     }
+     else if (CONST.env == 'system'){
+          if (APIENV.env == null) {
+               return "http://localhost:5000/";
+          }
+          else {
+               return "http://" + APIENV.env + "/";
+          }
      }
 }

@@ -89,6 +89,7 @@ td {
 
 #cvedatafilter{
     width: 80%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #dropdownstatus{
@@ -119,15 +120,20 @@ td select.cveoptions{
     font-size: 15;
 }
 
+table.cvedata tr.odd { background-color: #E2E4FF; } /*  */
+table.cvedata tr.even { background-color: white; }
+
 table.actionstable{
     border: "0";
     border-spacing: "5";
     padding-left:"50px";
     float: right;
+    
 }
 
 table.actionstable th, table.actionstable td{
-    padding: "5";    
+    padding: "5";
+    background-color: lightgray;
 }
 
 table.detailstable{
@@ -138,7 +144,8 @@ table.detailstable{
 }
 
 table.detailstable th, table.detailstable td{
-    padding: "5";    
+    padding: "5";
+    background-color: lightgray; 
 }
 
 table.filestable{
@@ -150,7 +157,8 @@ table.filestable{
 }
 
 table.filestable th, table.filestable td{
-    padding: "5";    
+    padding: "5";
+    background-color: lightgray; 
 }
 
 table.cvedata{

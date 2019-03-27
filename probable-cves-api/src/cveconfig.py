@@ -10,7 +10,6 @@ def readconfig(filename='config-files/db.ini', section='devcluster'):
     # read config file
     filename = os.path.dirname(__file__)+'/'+filename
     parser.read(filename)
-    print(parser)
     
     db = {}
     if parser.has_section(section):
@@ -21,6 +20,16 @@ def readconfig(filename='config-files/db.ini', section='devcluster'):
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
 
     return db
+
+def readconfigEnv():
+    db = {}
+    db['host'] = os.getenv('PGBOUNCER_SERVICE_HOST', 'bayesian-pgbouncer')
+    db['database'] = os.getenv('POSTGRESQL_DATABASE')
+    db['user'] = os.getenv('POSTGRESQL_USER')
+    db['password'] = os.getenv('POSTGRESQL_PASSWORD')
+    db['port'] = os.getenv('PGBOUNCER_SERVICE_PORT', '5432')    
+    return db
+
 
 class Postgres:
     """Postgres connection session handler."""
